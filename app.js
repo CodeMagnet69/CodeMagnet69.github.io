@@ -4,7 +4,8 @@ const express = require("express");
 const ejs = require("ejs");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
-const encrypt = require("mongoose-encryption");
+const bcrypt = require("bcrypt");
+const saltRounds = 10;
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const findOrCreate = require("mongoose-findorcreate");
 
@@ -22,7 +23,7 @@ const userSchema = new mongoose.Schema({
 });
 
 const secret = process.env.ENCRYPTION;
-userSchema.plugin(encrypt, { secret: secret, encryptedFields: ["password"] })
+
 
 const User = new mongoose.model("User", userSchema);
 
@@ -41,18 +42,23 @@ app.get("/register", function (req, res) {
 })
 
 app.post("/register", function (req, res) {
-  const newUser = new User({
-    email: req.body.username,
-    password: req.body.password
-  })
+  bcrypt.hash(req.body.password, saltRounds, function(err, hash) {
 
-  newUser.save(function (err) {
-    if (err) {
-      console.log(err);
-    } else {
-      res.render("documentation");
-    }
-  });
+    const newUser = new User({
+      email: req.body.username,
+      password: hash
+    })
+  
+    newUser.save(function (err) {
+      if (err) {
+        console.log(err);
+      } else {
+        res.render("documentation");
+      }
+    });
+});
+
+
 });
 
 app.post("/login", function (req, res) {
@@ -64,9 +70,16 @@ app.post("/login", function (req, res) {
       console.log(err)
     } else {
       if (foundUser) {
-        if (foundUser.password === password) {
-          res.render("documentation");
-        }
+        bcrypt.compare(password, foundUser.password, function(err, result) {
+          if(err){
+            console.log(err);
+          }else{
+            if(result){
+              res.render("documentation");
+            }
+          }
+
+      });
       }
     }
   });
