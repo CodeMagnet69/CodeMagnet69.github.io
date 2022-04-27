@@ -33,7 +33,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 //connecting to mongoose--------------------------------------------------------------------------
-mongoose.connect("mongodb://localhost:27017/userDB", { useNewUrlParser: true });
+mongoose.connect(process.env.MONGO_CONFIG, { useNewUrlParser: true });
 
 //setting up model and schema---------------------------------------------------------------------
 const userSchema = new mongoose.Schema({
