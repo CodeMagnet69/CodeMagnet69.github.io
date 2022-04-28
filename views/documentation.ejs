@@ -1,13 +1,68 @@
 <%- include('partials/header') %>
 
-<div class="jumbotron text-center">
-  <div class="container">
-    <i class="fas fa-key fa-6x"></i>
-    <h1 class="display-3">You've Discovered My Secret!</h1>
-    <hr>
-    
-    <a class="btn btn-light btn-lg" href="/logout" role="button">Log Out</a>
-  </div>
-</div>
+  <div class="jumbotron text-center">
+    <div class="container">
+      <i class="fas fa-key fa-6x"></i>
+      <h1 class="display-3">You've Discovered My Documentation!</h1>
+      <hr>
 
-<%- include('partials/footer') %>
+      <a class="btn btn-light btn-lg" href="/logout" role="button">Log Out</a>
+    </div>
+    <h1>Risikoanalyse </h1><br><br><br><br><br><br>
+    </b>
+    <p>
+      I dette prosjektet bruker jeg Oauth.2.0 til å verifisere brukere gjennom google.
+      En av sikkerhetsproblemene med dette rammeverket er at det er ekstremt fleksibelt,
+      som betyr at rammeverket fungerer selv om det ikke er helt sikkert.
+      Dette kan gjøre at nye devs som aldri har brukt Oauth før kan gjøre små feil
+      som leder til at bruker data kan kommer på avveie.
+      Hovedproblemet stammer fra databasen der man lagrer googleID og accsess token,
+      problemet er at Oauth ikke automatisk kryptere disse og at man må lete veldig
+      gjennom dokumentasjonen for å finne måter å kryptere denne informasjonen på.
+      Dette har ikke jeg gjort i dette prosjektet, men jeg lagrer ikke accsess token uansett.
+      I dette prosjektet har jeg også laget min egen innloggings funksjon der brukeren
+      kan skrive inn email og passord, dette blir lagret i databasen min.
+      Men før jeg gjør det hasher jeg og salter passordet til brukeren for å unngå
+      at noen som har hacket seg inn i dben får se alle passordene til brukerne.
+      PGA saltingen er det heller ikke mulig å bruke et hashtable for å gjenkjenne
+      passordene i databasen fordi saltingen legger til ekstra strenger med tekst som igjen blir hashet.
+    </p> <br><br>
+
+    <h1>Vurdering av rammeverk</h1><br><br>
+
+    <p>
+
+
+      Oauth2.0 var relativt enkelt å bruke, jeg trengte under 30 linjer kode for å få autentiseringen på plass,
+      og alt stod i dokumentasjonen. Det eneste problemet jeg hadde var at dokumentasjonen var litt forvirrende
+      å navigere, men det er kanskje bare jeg som er uerfaren.
+    </p><br><br>
+
+    <h1>Dokumentasjon </h1>
+
+    <p>
+      For å hoste nettsiden har jeg brukt Heroku, dette er ekstremt enkelt, det er bare å følge dokumentasjonen deres.
+      Dokumentasjonen er nydelig og oversiktlig og du burde ikke ha noen problemer med å implementere dette,
+      bare husk at appen din må listene på porten Heroku bestemmer, det betyr at du må bruke
+      app.listen{process.env.PORT}.
+      En annen ting som er viktig å huske på er at MongoDB ikke fungerer med heroku, du må isteden bruke MongoDB Atlas,
+      dette bruke jeg veldig lang tid på å finne ut av, så ikke la det være deg!
+    </p>
+    <br><br>
+    <p>
+      Jeg valgte å bruke Heroku og google Oauth fordi det virket som den enkleste løsningen og en som jeg er litt kjent
+      med fra før av, disse to servicene er også veldig populære og brukes av mange andre utviklere.
+    </p><br><br>
+
+    <p>link til Heroku dokumentasjon: <a href="https://devcenter.heroku.com/"></a></p>
+
+    <p>Hvordan sette opp MongoDB atlas med Heroku: <a href="https://www.mongodb.com/developer/how-to/use-atlas-on-heroku/ "></a></p>
+
+    <p>Link til Oatuh2.0 dokmentasjon: <a href="https://www.passportjs.org/tutorials/google/"></a></p>
+
+
+  </div>
+
+
+
+  <%- include('partials/footer') %>

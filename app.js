@@ -50,14 +50,14 @@ const User = new mongoose.model("User", userSchema);
 //Creating a new strategy, serializing and deserializing user-------------------------------------
 passport.use(User.createStrategy());
 
-passport.serializeUser(function(user, cb) {
-  process.nextTick(function() {
+passport.serializeUser(function (user, cb) {
+  process.nextTick(function () {
     cb(null, { id: user.id, username: user.username, name: user.name });
   });
 });
 
-passport.deserializeUser(function(user, cb) {
-  process.nextTick(function() {
+passport.deserializeUser(function (user, cb) {
+  process.nextTick(function () {
     return cb(null, user);
   });
 });
@@ -100,11 +100,11 @@ app.get("/login", function (req, res) {
   res.render("login");
 });
 
-app.post("/login", passport.authenticate("local"), function(req, res){
+app.post("/login", passport.authenticate("local"), function (req, res) {
   res.redirect("/documentation");
 });
 
-app.get("/logout", function(req, res){
+app.get("/logout", function (req, res) {
   req.logout();
   res.redirect("/")
 })
@@ -114,26 +114,26 @@ app.get("/register", function (req, res) {
 });
 
 app.post("/register", function (req, res) {
-  User.register({username: req.body.username}, req.body.password, function(err,user){
-    if(err){
+  User.register({ username: req.body.username }, req.body.password, function (err, user) {
+    if (err) {
       console.log(err);
       res.redirect("/register");
-    }else{
-      passport.authenticate("local")(req, res, function(){
+    } else {
+      passport.authenticate("local")(req, res, function () {
         res.redirect("/documentation");
       })
     }
   });
 });
 
-app.get("/documentation", function(req, res){
-  if(req.isAuthenticated()){
+app.get("/documentation", function (req, res) {
+  if (req.isAuthenticated()) {
     res.render("documentation");
-  }else{
+  } else {
     res.redirect("/login");
   }
 
-  });
+});
 
 app.listen(process.env.PORT || 3000, function () {
   console.log("Server started on port 3000");
